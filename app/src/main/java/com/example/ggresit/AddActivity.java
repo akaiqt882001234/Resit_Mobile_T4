@@ -1,8 +1,10 @@
 package com.example.ggresit;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -78,6 +80,8 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void saveData() {
+
+
         //take user giver data in variable
         name = _name.getText().toString();
         date = _date.getText().toString();
@@ -87,7 +91,7 @@ public class AddActivity extends AppCompatActivity {
 
         //check edit or add mode to save data to database
         //check filed data
-        if (!name.isEmpty() ||!dest.isEmpty() ||!date.isEmpty() ||!risk.isEmpty() ||!desc.isEmpty()){
+        if (!name.isEmpty() &&!dest.isEmpty() &&!date.isEmpty() &&!risk.isEmpty() &&!desc.isEmpty()){
             //save data
             if(isEditMode){
                 //edit mode
@@ -99,6 +103,7 @@ public class AddActivity extends AppCompatActivity {
                         ""+risk,
                         ""+desc
                 );
+
                 Toast.makeText(getApplicationContext(), "Update Successfully! "+id, Toast.LENGTH_SHORT).show();
 
             }else{
@@ -111,13 +116,14 @@ public class AddActivity extends AppCompatActivity {
                         ""+desc
                 );
                 //check insert data successfully
+                displayNextAlert(name, date, dest, risk, desc);
                 Toast.makeText(getApplicationContext(), "Add Successfully! "+id, Toast.LENGTH_SHORT).show();
             }
 
 
         }else{
             //show toast
-            Toast.makeText(getApplicationContext(), "No data to save...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Please enter all the boxes!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -127,5 +133,24 @@ public class AddActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
+    }
+
+    private void displayNextAlert(String name, String dest, String date, String risk, String desc) {
+        new AlertDialog.Builder(this).setTitle("Add New Trip")
+                .setMessage(
+                        "Trip name: " + name +
+                                "\n Destination: " + dest +
+                                "\n Date: " + date +
+                                "\n Risk Assessment: " + risk +
+                                "\n Description: " + desc
+                )
+                .setNeutralButton("Close", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(AddActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).show();
     }
 }
