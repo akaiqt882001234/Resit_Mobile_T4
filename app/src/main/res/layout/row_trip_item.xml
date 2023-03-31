@@ -83,7 +83,7 @@
                 android:layout_height="45dp"
                 android:text="EDIT"
                 android:textSize="10dp"
-                android:backgroundTint="#2196f3"
+                android:backgroundTint="@color/colorSecondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

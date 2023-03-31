@@ -161,7 +161,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:backgroundTint="#229E32"
+        android:backgroundTint="@color/colorSecondary"
         android:text="ADD TRIP !"
         android:textColor="@android:color/white"
         android:textStyle="bold"

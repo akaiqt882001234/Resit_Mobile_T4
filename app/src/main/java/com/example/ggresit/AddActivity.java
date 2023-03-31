@@ -86,8 +86,6 @@ public class AddActivity extends AppCompatActivity {
         desc = _desc.getText().toString();
 
         //check edit or add mode to save data to database
-
-
         //check filed data
         if (!name.isEmpty() ||!dest.isEmpty() ||!date.isEmpty() ||!risk.isEmpty() ||!desc.isEmpty()){
             //save data
