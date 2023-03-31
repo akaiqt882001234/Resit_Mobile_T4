@@ -63,7 +63,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-
+    //Delete Function
+    //delete data by id
+    public void deleteTrip(String id){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(Constants.TABLE_NAME, Constants.CL_ID + " = ?",new String[]{id});
+        db.close();
+    }
+    //delete all data
+    public void deleteAllTrip(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM "+Constants.TABLE_NAME);
+        db.close();
+    }
     //get data
     public ArrayList<ModelTrip> getAllData(){
         //create arraylist
@@ -90,5 +102,32 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         db.close();
         return arrayList;
+    }
+    //search data in database
+    public ArrayList<ModelTrip> getSearchTrip(String query){
+        ArrayList<ModelTrip> tripList = new ArrayList<>();
+        //get readable database
+        SQLiteDatabase db = getReadableDatabase();
+        //query for search
+        String queryToSearch = "SELECT * FROM "+Constants.TABLE_NAME+" WHERE "+Constants.CL_NAME + " LIKE '%" +query+"%'";
+        Cursor cursor = db.rawQuery(queryToSearch,null);
+        //looping through all record and add to list
+        if(cursor.moveToFirst()){
+            do {
+                ModelTrip modelTrip = new ModelTrip(
+                        ""+cursor.getInt(cursor.getColumnIndexOrThrow(Constants.CL_ID)),
+                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.CL_NAME)),
+                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.CL_DATE)),
+                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.CL_DEST)),
+                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.CL_RISK)),
+                        ""+cursor.getString(cursor.getColumnIndexOrThrow(Constants.CL_DESC))
+
+                );
+                tripList.add(modelTrip);
+            }while (cursor.moveToNext());
+        }
+        db.close();
+        return tripList;
+
     }
 }

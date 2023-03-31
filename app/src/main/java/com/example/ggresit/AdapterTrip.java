@@ -18,10 +18,12 @@ public class AdapterTrip extends RecyclerView.Adapter<AdapterTrip.TripViewHolder
 
     public Context context;
     private ArrayList<ModelTrip> tripList;
+    private DBHelper dbHelper;
 
     public AdapterTrip(Context context, ArrayList<ModelTrip> tripList) {
         this.context=context;
         this.tripList=tripList;
+        dbHelper = new DBHelper(context);
     }
 
     @NonNull
@@ -70,7 +72,9 @@ public class AdapterTrip extends RecyclerView.Adapter<AdapterTrip.TripViewHolder
         holder.tripDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show();
+                dbHelper.deleteTrip(id);
+                //refresh data
+                ((MainActivity)context).onResume();
             }
         });
 
