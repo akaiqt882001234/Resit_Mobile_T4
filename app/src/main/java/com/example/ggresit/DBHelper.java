@@ -33,22 +33,36 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //Insert Function(add data to database)
     public long insertTrip( String name, String date, String dest, String risk, String desc){
-
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-
         cv.put(Constants.CL_NAME,name);
-        cv.put(Constants.CL_DEST,dest);
         cv.put(Constants.CL_DATE,date);
+        cv.put(Constants.CL_DEST,dest);
         cv.put(Constants.CL_RISK,risk);
         cv.put(Constants.CL_DESC,desc);
-
         //insert data in row
         long id = db.insert(Constants.TABLE_NAME,null,cv);
         db.close();
         return id;
     }
+
+    //Update Function(update data from database)
+    public void updateTrip(String id, String name, String date, String dest, String risk, String desc){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(Constants.CL_NAME,name);
+        cv.put(Constants.CL_DATE,date);
+        cv.put(Constants.CL_DEST,dest);
+        cv.put(Constants.CL_RISK,risk);
+        cv.put(Constants.CL_DESC,desc);
+        //update data in row
+        db.update(Constants.TABLE_NAME,cv,Constants.CL_ID+" =? ",new String[]{id});
+        db.close();
+
+    }
+
 
     //get data
     public ArrayList<ModelTrip> getAllData(){

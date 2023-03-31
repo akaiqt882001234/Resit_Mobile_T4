@@ -3,6 +3,7 @@ package com.example.ggresit;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +16,8 @@ public class AddActivity extends AppCompatActivity {
     private Button add_button;
 
     //String variable
-    private String name,dest,date,risk,desc;
+    private String id,name,dest,date,risk,desc;
+    private Boolean isEditMode;
     //action bar
     private ActionBar actionBar;
     private DBHelper dbHelper;
@@ -29,7 +31,7 @@ public class AddActivity extends AppCompatActivity {
         dbHelper = new DBHelper(this);
 
         actionBar = getSupportActionBar();
-        actionBar.setTitle("Add Trip");
+
 
         //back button
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -37,11 +39,34 @@ public class AddActivity extends AppCompatActivity {
 
         //init view
         _name = findViewById(R.id._name);
-        _dest = findViewById(R.id._dest);
         _date = findViewById(R.id._date);
+        _dest = findViewById(R.id._dest);
         _risk = findViewById(R.id._risk);
         _desc = findViewById(R.id._desc);
         add_button = findViewById(R.id.add_button);
+
+        //get intent data
+        Intent intent = getIntent();
+        isEditMode = intent.getBooleanExtra("isEditMode",false);
+
+        if(isEditMode){
+            //set title
+            actionBar.setTitle("Update Trip");
+            //get other value form intent
+            id = intent.getStringExtra("ID");
+            name = intent.getStringExtra("NAME");
+            date = intent.getStringExtra("DATE");
+            dest = intent.getStringExtra("DEST");
+            risk = intent.getStringExtra("RISK");
+            //ser value in editText field
+            _name.setText(name);
+            _date.setText(date);
+            _dest.setText(dest);
+            _risk.setText(risk);
+        }else {
+            //add mode on
+            actionBar.setTitle("Add Trip");
+        }
 
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,23 +80,42 @@ public class AddActivity extends AppCompatActivity {
     private void saveData() {
         //take user giver data in variable
         name = _name.getText().toString();
-        dest = _name.getText().toString();
         date = _date.getText().toString();
+        dest = _dest.getText().toString();
         risk = _risk.getText().toString();
         desc = _desc.getText().toString();
+
+        //check edit or add mode to save data to database
+
 
         //check filed data
         if (!name.isEmpty() ||!dest.isEmpty() ||!date.isEmpty() ||!risk.isEmpty() ||!desc.isEmpty()){
             //save data
-            long id = dbHelper.insertTrip(
-                    ""+name,
-                    ""+dest,
-                    ""+date,
-                    ""+risk,
-                    ""+desc
-            );
-            //check insert data successfully
-            Toast.makeText(getApplicationContext(), "Add Success! "+id, Toast.LENGTH_SHORT).show();
+            if(isEditMode){
+                //edit mode
+                dbHelper.updateTrip(
+                        ""+id,
+                        ""+name,
+                        ""+date,
+                        ""+dest,
+                        ""+risk,
+                        ""+desc
+                );
+                Toast.makeText(getApplicationContext(), "Update Successfully! "+id, Toast.LENGTH_SHORT).show();
+
+            }else{
+                //add mode
+                long id = dbHelper.insertTrip(
+                        ""+name,
+                        ""+date,
+                        ""+dest,
+                        ""+risk,
+                        ""+desc
+                );
+                //check insert data successfully
+                Toast.makeText(getApplicationContext(), "Add Successfully! "+id, Toast.LENGTH_SHORT).show();
+            }
+
 
         }else{
             //show toast

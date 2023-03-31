@@ -1,10 +1,12 @@
 package com.example.ggresit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,18 +38,41 @@ public class AdapterTrip extends RecyclerView.Adapter<AdapterTrip.TripViewHolder
         //get data
         String id = modelTrip.getId();
         String name = modelTrip.getName();
-        String dest = modelTrip.getDest();
         String date = modelTrip.getDate();
+        String dest = modelTrip.getDest();
         String risk = modelTrip.getRisk();
 //        String desc = modelTrip.getDesc();
 
         //set data in view
         holder.tripId.setText(id);
         holder.tripName.setText(name);
-        holder.tripDest.setText(dest);
         holder.tripDate.setText(date);
+        holder.tripDest.setText(dest);
         holder.tripRisk.setText(risk);
-//        holder.tripDesc.setText(desc);
+
+        //handle edit btn click
+        holder.tripEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context,AddActivity.class);
+                intent.putExtra("ID",id);
+                intent.putExtra("NAME",name);
+                intent.putExtra("DATE",date);
+                intent.putExtra("DEST",dest);
+                intent.putExtra("RISK",risk);
+                intent.putExtra("isEditMode",true);
+                context.startActivity(intent);
+
+            }
+        });
+        // handle delete btn click
+        holder.tripDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }
@@ -56,16 +81,18 @@ public class AdapterTrip extends RecyclerView.Adapter<AdapterTrip.TripViewHolder
     public int getItemCount() { return tripList.size(); }
 
     static class TripViewHolder extends RecyclerView.ViewHolder{
-
         //view for row_trip_item
-        TextView tripId,tripName,tripDest,tripDate,tripRisk,tripDesc;
+        TextView tripId,tripName,tripDest,tripDate,tripRisk,tripEdit,tripDelete;
+
         public TripViewHolder(@NonNull View itemView){
             super(itemView);
             tripId = itemView.findViewById(R.id.trip_id);
             tripName = itemView.findViewById(R.id.trip_name);
-            tripDest = itemView.findViewById(R.id.trip_dest);
             tripDate = itemView.findViewById(R.id.trip_date);
+            tripDest = itemView.findViewById(R.id.trip_dest);
             tripRisk = itemView.findViewById(R.id.trip_risk);
+            tripEdit = itemView.findViewById(R.id.trip_edit);
+            tripDelete = itemView.findViewById(R.id.trip_delete);
         }
     }
 }
